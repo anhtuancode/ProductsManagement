@@ -65,34 +65,38 @@ module.exports.changeStatus = async (req,res) =>{
 // [PATCH] /admin/products/change-multi
 module.exports.changeMulti = async (req,res) =>{
     const type = req.body.type;
-    const ids = req.body.ids.split(",");
+    const ids = req.body.ids.split(", ");
 
-//    switch (type) {
-//     case "active":
-//         await Product.updateMany(
-//             { _id: { $in: ids } }, 
-//             { $set: { status: "active" } } 
-//         );
-//         break;
-//     case "inactive":
-//         await Product.updateMany(
-//             { _id: { $in: ids } }, 
-//             { $set: { status: "active" } } 
-//         );
-//         break;
-//     default:
-//         break;
-//    }
+    switch (type) {
+        case "active":
+            await Product.updateMany({ _id: { $in: ids } }, { status: "active"  });
+            break;
+        case "inactive":
+            await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
+            break;
+        case "delete-all":
+            await Product.updateMany({ _id: { $in: ids } }, { 
+                deleted: true,
+                deletedAt: new Date()
+            });
+            break;
+        default:
+            break;  
+    }
 
 
-   res.redirect("back");
+    res.location(req.get("Referrer") || "/");
 };
 
 // [DELETE] /admin/products/delete/:id
 module.exports.deleteItem = async (req,res) =>{
     const id = req.params.id;
 
-    await Product.deleteOne({ _id: id});
+    // await Product.deleteOne({ _id: id}); xóa vĩnh viễn
+    await Product.updateOne({_id: id}, {
+        deleted: true,
+        deletedAt: new Date()
+    });
 
-    res.redirect("back");
+    res.location(req.get("Referrer") || "/");
 };
