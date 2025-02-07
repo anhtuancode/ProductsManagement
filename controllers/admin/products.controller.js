@@ -93,6 +93,7 @@ module.exports.changeMulti = async (req, res) => {
         position = parseInt(position);
         await Product.updateOne({ _id: id }, { position: position });
       }
+      req.flash('success', `Đã xóa thành công ${ids.length} sản phẩm`);
       break;
     default:
       break;
@@ -113,6 +114,8 @@ module.exports.deleteItem = async (req, res) => {
       deletedAt: new Date(),
     }
   );
+  req.flash('success', `Đã xóa thành công sản phẩm`);
+
 
   res.redirect("back");
 };
