@@ -17,7 +17,6 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       slug: "title", 
       unique:true 
-    
     },
     deleted: {
       type: Boolean,
