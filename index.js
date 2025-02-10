@@ -27,14 +27,14 @@ app.use(flash());
 
 app.use(methodOverride('_method'));
 
-app.set("views", "./views");
+app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
 
 
 // App local Variable
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`));
 
 //routes
 route(app);
