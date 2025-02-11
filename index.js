@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path');
 const methodOverride = require('method-override');
 const bodyParser = require("body-parser");
 const flash = require("express-flash");
@@ -19,6 +20,11 @@ const port = process.env.PORT;
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
+
+
+// Tiny MCE
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce'))); 
+// End Tiny MCE
 
 //Flash
 app.use(cookieParser('anhtuan220903'));
