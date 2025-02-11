@@ -8,8 +8,6 @@ const systemConfig = require("../../config/system");
 
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
-  // console.log(req.query.status);
-
   // Bộ lọc
   const filterStatus = filterStatusHelper(req.query);
 
@@ -39,9 +37,19 @@ module.exports.index = async (req, res) => {
     countProducts
   );
 
+  //Sort 
+  const sort = {};
+
+  if(req.query.sortKey && req.query.sortValue){
+    sort[req.query.sortKey] = req.query.sortValue;
+  }else{
+    sort.position = "desc";
+  }
+  // End Sort
+
   // Pagination End
   const products = await Product.find(find)
-    .sort({position: "desc"})
+    .sort(sort)
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
 

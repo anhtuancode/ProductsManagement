@@ -166,3 +166,37 @@ if(uploadImage){
 }
 
 // End Upload Image
+
+// Sort
+const sort = document.querySelector("[sort]");
+if(sort){
+  let url = new URL(window.location.href);
+  const sortSelect = sort.querySelector("[sort-select]");
+  const sortClear = sort.querySelector("[sort-clear]")
+
+  // Sắp xếp
+  sortSelect.addEventListener("change", (event) =>{
+    const [sortKey, sortValue] = event.target.value.split("-");  
+    
+    url.searchParams.set("sortKey", sortKey);
+    url.searchParams.set("sortValue", sortValue);
+
+    window.location.href = url.href; // load lại trang nên mất giá trị của option nên phải làm bên ngoàingoài
+  });
+  // Xóa sắp xếp
+  sortClear.addEventListener("click", (event) =>{
+    url.searchParams.delete("sortKey");
+    url.searchParams.delete("sortValue");
+    window.location.href = url.href;
+  })
+
+  const sortKey = url.searchParams.get("sortKey");
+  const sortValue = url.searchParams.get("sortValue");
+  if(sortKey && sortValue){
+    const option = `${sortKey}-${sortValue}`;
+
+    const optionSelected = sortSelect.querySelector(`option[value=${option}]`);
+    optionSelected.setAttribute("selected", true);
+  }
+}
+// End Sort
