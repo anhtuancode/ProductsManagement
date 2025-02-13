@@ -1,8 +1,8 @@
 extends ../../layouts/default.pug
-
+include ../../mixins/table-tree.pug
 
 block main 
-    h1 Danh sách sản phẩm
+    h1 Danh mục sản phẩm
     .card.mb-3
         .card-header Danh Sách
         .card-body
@@ -28,49 +28,5 @@ block main
                         th Trạng thái
                         th Hành động
                 tbody
-                    each item, index in records
-                        tr
-                            td 
-                                input(
-                                    type="checkbox"
-                                    name="id"
-                                    value=item.id    
-                                )
-                            td #{index + 1}
-                            td
-                                img(src=item.thumbnail alt=item.title width="100px" height="auto")
-                            td #{item.title}
-                            td 
-                                input(
-                                    type="number"
-                                    value=item.position 
-                                    style="width: 60px"
-                                    min="1"
-                                    name="position"
-                                )
-                            td
-                                if(item.status == "active")
-                                    a(
-                                        href="javascript:;"
-                                        data-status=item.status
-                                        data-id=item.id
-                                        button-change-status
-                                        class="btn btn-success"
-                                    ) Hoạt động
-                                else
-                                    a(
-                                        href="javascript:;"
-                                        data-status=item.status
-                                        data-id=item.id
-                                        button-change-status
-                                        class="btn btn-danger"
-                                    ) Dừng hoạt động
-                            td
-                                a(href=`${prefixAdmin}/products-category/detail/${item.id}` class="btn btn-secondary") Chi Tiết
-                                a(href=`${prefixAdmin}/products-category/edit/${item.id}` class="btn btn-warning") Sửa
-                                button(
-                                    class="btn btn-danger"
-                                    button-delete
-                                    data-id=item.id
-                                ) Xóa
-                        tr
+                +table-tree(records)
+                        
