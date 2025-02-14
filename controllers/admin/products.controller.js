@@ -175,11 +175,18 @@ module.exports.edit = async (req, res) => {
       _id: req.params.id
     }
   
+    const category = await ProductCategory.find({
+      deleted: false
+    });
+  
+    const newCategory = createTreeHelper.tree(category);
+  
     const product = await Product.findOne(find);
   
     res.render("admin/pages/products/edit.pug", {
       pageTitle: "Chỉnh sửa sản phẩm",
-      product: product
+      product: product,
+      category: newCategory
     });
   } catch (error) {
     // req.flash('warning', `Không tồn tại sản phẩm này`); update tính năng này
