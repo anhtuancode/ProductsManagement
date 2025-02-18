@@ -1,7 +1,7 @@
 const Role = require("../../models/roles.model");
 const systemConfig = require("../../config/system");
 
-// [GET] /admin/dashboard
+// [GET] /admin/roles
 module.exports.index = async (req, res) => {
     let find ={
         deleted: false,
@@ -16,6 +16,7 @@ module.exports.index = async (req, res) => {
     });
 }
 
+// [GET] /admin/roles/create/:id
 module.exports.create = async (req, res) => {
 
     res.render("admin/pages/roles/create.pug",{
@@ -23,6 +24,7 @@ module.exports.create = async (req, res) => {
     });
 }
 
+// [POST] /admin/roles/create/:id
 module.exports.createPost = async (req, res) => {
     const record = new Role(req.body);
     
@@ -31,6 +33,7 @@ module.exports.createPost = async (req, res) => {
     res.redirect(`${systemConfig.prefixAdmin}/roles`);
 }
 
+// [GET] /admin/roles/edit/:id
 module.exports.edit = async (req, res) => {
     try {
         const id = req.params.id;
@@ -53,6 +56,7 @@ module.exports.edit = async (req, res) => {
     }
 }
 
+// [PATCH] /admin/roles/edit/:id
 module.exports.editPatch = async (req, res) => {
     try {
         const id = req.params.id;
@@ -64,5 +68,35 @@ module.exports.editPatch = async (req, res) => {
         req.flash("error", "Cập nhật thất bại")
     }
     
+    res.redirect("back");
+}
+
+// [GET] /admin/permissions
+module.exports.permissions = async (req, res) => {
+    let find={
+        deleted:false
+    };
+
+    const records = await Role.find(find);
+    res.render("admin/pages/roles/permission.pug",{
+        pageTitle: "Phân quyền",
+        records: records
+    });
+}
+// [PATCH] /admin/permissions
+module.exports.permissionsPatch = async (req, res) => {
+    try {
+        const permissions = JSON.parse(req.body.permissions);
+
+        
+        for (const item of permissions) {
+            await Role.updateOne({_id: item.id}, {permissions: item.permissions});
+        }
+
+        req.flash("success", "Cập nhật phân quyền thành công");
+    } catch (error) {
+        req.flash("error", "Cập nhật phân quyền thất bại");
+    }
+
     res.redirect("back");
 }
