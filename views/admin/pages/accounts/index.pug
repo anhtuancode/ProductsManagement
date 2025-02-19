@@ -1,8 +1,12 @@
 extends ../../layouts/default.pug
+include ../../mixins/alert.pug
 
 block main
     h1(class="mb-4") Danh sách tài khoản
 
+    +alert-success(5000)
+    +alert-error(5000)
+    
     .card.mb-3
         .card-header Danh sách
         .card-body
@@ -19,8 +23,6 @@ block main
             )
                 thead
                     tr
-                        th 
-                          input(type="checkbox" name="checkall")
                         th STT
                         th Avatar
                         th Họ tên
