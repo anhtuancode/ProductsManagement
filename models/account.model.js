@@ -3,10 +3,10 @@ const generate = require("../helpers/generate");
 
 const AccountSchema = new mongoose.Schema(
   {
-    fullname: String,
+    fullName: String,
     email: String,
     password: String,
-    phone:String,
+    phone: String,
     avatar: String,
     role_id: String,
     status: String,
