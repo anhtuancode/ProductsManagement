@@ -7,20 +7,24 @@ html
 
         link(rel="stylesheet", href="/admin/css/style.css")
     body 
-        include ../partials/header.pug
 
-        .body 
-            include ../partials/sider.pug
+        if(role.permissions.length > 0)
+            include ../partials/header.pug
 
-
-            .main    
-                block main
+            .body 
+                include ../partials/sider.pug
 
 
-        script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js") 
+                .main    
+                    block main
 
-        //- Tiny MCE
-        <script src= "/tinymce/tinymce.min.js"></script>
-        <script src= "/admin/js/tinymce-config.js"></script>
-        //- End Tiny MCE
-        script(src="/admin/js/script.js" type="module") 
+
+            script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js") 
+
+            //- Tiny MCE
+            <script src= "/tinymce/tinymce.min.js"></script>
+            <script src= "/admin/js/tinymce-config.js"></script>
+            //- End Tiny MCE
+            script(src="/admin/js/script.js" type="module") 
+        else 
+            h1 Tài khoản này không có quyền truy cập
