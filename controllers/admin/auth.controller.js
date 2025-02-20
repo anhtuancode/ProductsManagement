@@ -4,9 +4,15 @@ const systemConfig = require("../../config/system");
 
 // [GET] /admin/auth/login
 module.exports.login = async (req, res) => {  
+  // so sanh 2 token co giong nhau ko neu ng dung sua lai token thi redirect ve trang login
+  const user = await Account.findOne({token: req.cookies.token});
+  if(user){
+    res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+  }else{
     res.render("admin/pages/auth/login.pug", {
       pageTitle: "Trang đăng nhập"
     });
+  }
 };
 
 // [POST] /admin/auth/login
