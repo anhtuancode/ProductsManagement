@@ -58,6 +58,7 @@ block main
                             th Vị trí 
                             th Trạng thái
                             th Người tạo
+                            th Người cập nhật
                             th Hành động
                     tbody
                         each item, index in products
@@ -81,10 +82,6 @@ block main
                                         min="1"
                                         name="position"
                                     )
-                                td 
-                                    p #{item.accountFullName}  
-                                    +formatDate(item.createdBy.createdAt)
-                                    +formatTime(item.createdBy.createdAt)
                                 td
                                     if(role.permissions.includes("products_edit"))
                                         if(item.status == "active")
@@ -116,6 +113,17 @@ block main
                                             
                                                 class="btn btn-danger"
                                             ) Dừng hoạt động
+                                td 
+                                    p #{item.accountFullName}  
+                                    +formatDate(item.createdBy.createdAt)
+                                    +formatTime(item.createdBy.createdAt)
+                                td 
+                                    - const updatedBy = item.updatedBy.slice(-1)[0];
+                                    if(updatedBy)
+                                        p #{updatedBy.accountFullName}
+                                        p   
+                                            +formatDate(updatedBy.updatedBy)
+                                            +formatTime(updatedBy.updatedBy)   
                                 td
                                     a(href=`${prefixAdmin}/products/detail/${item.id}` class="btn btn-secondary") Chi Tiết
                                     if(role.permissions.includes("products_edit"))

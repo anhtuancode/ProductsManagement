@@ -1,13 +1,29 @@
 const ProductCategory = require("../../models/product-category.model");
 
 const systemConfig = require("../../config/system");
-
+const filterStatusHelper = require("../../helpers/filter-status");
+const searchHelper = require("../../helpers/search");
 const createTreeHelper = require("../../helpers/createTree");
+const paginationHelper = require("../../helpers/pagination");
 
 // [GET] /admin/products-category
 module.exports.index = async (req, res) => {  
   let find ={
     deleted: false
+  }
+
+  // Bộ lọc
+  const filterStatus = filterStatusHelper(req.query);
+
+  // Tìm kiếm
+  const objectSearch = searchHelper(req.query);
+
+  if (objectSearch.regex) {
+    find.title = objectSearch.regex;
+  }
+
+  if (req.query.status) {
+    find.status = req.query.status;
   }
 
   const records = await ProductCategory.find(find);
@@ -16,7 +32,9 @@ module.exports.index = async (req, res) => {
 
   res.render("admin/pages/products-category/index.pug", {
     pageTitle: "Danh mục sản phẩm",
-    records: newRecords
+    records: newRecords,
+    filterStatus: filterStatus,
+    keyword: objectSearch.keyword,
   });
 };
 
@@ -85,4 +103,22 @@ module.exports.editPatch = async (req, res) => {
   await ProductCategory.updateOne({_id:id},req.body)
 
   res.redirect("back");
+};
+
+module.exports.detail = async (req, res) => {  
+  try {
+    const find = {
+      deleted: false,
+      _id: req.params.id
+    }
+  
+    const record = await ProductCategory.findOne(find);
+  
+    res.render("admin/pages/products-category/detail.pug", {
+      pageTitle: record.title,
+      record: record
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+  }
 };
